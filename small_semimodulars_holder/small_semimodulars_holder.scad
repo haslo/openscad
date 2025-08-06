@@ -1,26 +1,30 @@
 coast_width = 23; coast_depth = 14; coast_height = 2; coast_angle = 30;
 mavis_width = 23.2; mavis_depth = 13.4; mavis_height = 2; mavis_angle = coast_angle * 2;
+
 coast_front_bottom_height = 4.5;
 coast_front_height_offset = coast_depth * sin(coast_angle);
 coast_front_lateral_offset = coast_depth * cos(coast_angle);
 coast_front_top_height = coast_front_bottom_height + coast_front_height_offset;
+
 mavis_front_bottom_height = coast_front_top_height;
 mavis_front_bottom_lateral_offset = coast_front_lateral_offset;
 mavis_front_height_offset = mavis_depth * sin(mavis_angle);
 mavis_front_lateral_offset = mavis_depth * cos(mavis_angle);
+
 holder_extension_sides_up = 0.2;
-holder_extension_sides_bottom = 0.2;
+holder_extension_sides_bottom = 0.1;
 holder_extension_sides_frontback = 0.3;
 holder_creep_sides_up = 1.0;
 holder_creep_sides_bottom = 0.5;
+
+pillar_length = 35;
 pillar_radius = 0.6;
 ground_pillar_radius = 0.8;
 pillar_faces = 32;
 
-module pillars(bracket_width, bracket_depth, bracket_height, bracket_x, bracket_y, bracket_z, angle) {
-    pillar_length = 35;
+module pillars(bracket_width, bracket_depth, bracket_height, pillar_x, bracket_y, bracket_z, angle) {
     // Front pillar
-    translate([bracket_x + bracket_width/2, bracket_y, bracket_z]) {
+    translate([pillar_x + bracket_width/2, bracket_y, bracket_z]) {
         rotate([-angle, 0, 0]) {
             translate([0, 0, -pillar_length]) {
                 cylinder(r=pillar_radius, h=pillar_length, $fn=pillar_faces);
@@ -29,7 +33,7 @@ module pillars(bracket_width, bracket_depth, bracket_height, bracket_x, bracket_
         sphere(r=pillar_radius, $fn=pillar_faces);
     }
     // Center pillar
-    translate([bracket_x + bracket_width/2, bracket_y + bracket_depth/2, bracket_z]) {
+    translate([pillar_x + bracket_width/2, bracket_y + bracket_depth/2, bracket_z]) {
         rotate([-angle, 0, 0]) {
             translate([0, 0, -pillar_length]) {
                 cylinder(r=pillar_radius, h=pillar_length, $fn=pillar_faces);
@@ -38,7 +42,7 @@ module pillars(bracket_width, bracket_depth, bracket_height, bracket_x, bracket_
         sphere(r=pillar_radius, $fn=pillar_faces);
     }
     // Back pillar
-    translate([bracket_x + bracket_width/2, bracket_y + bracket_depth, bracket_z]) {
+    translate([pillar_x + bracket_width/2, bracket_y + bracket_depth, bracket_z]) {
         rotate([-angle, 0, 0]) {
             translate([0, 0, -pillar_length]) {
                 cylinder(r=pillar_radius, h=pillar_length, $fn=pillar_faces);
@@ -59,7 +63,7 @@ module left_bracket(synth_width, synth_depth, angle) {
     translate([bracket_x, bracket_y, bracket_z]) {
         cube([bracket_width, bracket_depth, bracket_height]);
     }
-    pillars(bracket_width, bracket_depth, bracket_height, bracket_x, bracket_y, bracket_z, angle);
+    pillars(bracket_width + 1, bracket_depth, bracket_height, bracket_x, bracket_y, bracket_z, angle);
 }
 
 module center_bracket(synth_width, synth_depth, angle) {
@@ -87,7 +91,7 @@ module right_bracket(synth_width, synth_depth, angle) {
     translate([bracket_x, bracket_y, bracket_z]) {
         cube([bracket_width, bracket_depth, bracket_height]);
     }
-    pillars(bracket_width, bracket_depth, bracket_height, bracket_x, bracket_y, bracket_z, angle);
+    pillars(bracket_width - 1, bracket_depth, bracket_height, bracket_x, bracket_y, bracket_z, angle);
 }
 
 module coast_holder() {
