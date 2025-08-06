@@ -11,20 +11,20 @@ mavis_front_bottom_lateral_offset = coast_front_lateral_offset;
 mavis_front_height_offset = mavis_depth * sin(mavis_angle);
 mavis_front_lateral_offset = mavis_depth * cos(mavis_angle);
 
-holder_extension_sides_up = 0.2;
-holder_extension_sides_bottom = 0.1;
-holder_extension_sides_frontback = 0.3;
-holder_creep_sides_up = 1.0;
+holder_distance_sides_bottom = 0.5;
+holder_extension_sides_up = 0.3;
+holder_extension_sides_frontback = 0.5;
+holder_creep_sides_up = 0.8;
 holder_creep_sides_bottom = 0.5;
 
 pillar_length = 35;
-pillar_radius = 0.6;
+pillar_radius = 0.55;
 ground_pillar_radius = 0.8;
 pillar_faces = 32;
 
 module pillars(bracket_width, bracket_depth, bracket_height, pillar_x, bracket_y, bracket_z, angle) {
     // Front pillar
-    translate([pillar_x + bracket_width/2, bracket_y, bracket_z]) {
+    translate([pillar_x + bracket_width/2, bracket_y + 0.5, bracket_z]) {
         rotate([-angle, 0, 0]) {
             translate([0, 0, -pillar_length]) {
                 cylinder(r=pillar_radius, h=pillar_length, $fn=pillar_faces);
@@ -42,7 +42,7 @@ module pillars(bracket_width, bracket_depth, bracket_height, pillar_x, bracket_y
         sphere(r=pillar_radius, $fn=pillar_faces);
     }
     // Back pillar
-    translate([pillar_x + bracket_width/2, bracket_y + bracket_depth, bracket_z]) {
+    translate([pillar_x + bracket_width/2, bracket_y + bracket_depth - 1, bracket_z]) {
         rotate([-angle, 0, 0]) {
             translate([0, 0, -pillar_length]) {
                 cylinder(r=pillar_radius, h=pillar_length, $fn=pillar_faces);
@@ -53,17 +53,17 @@ module pillars(bracket_width, bracket_depth, bracket_height, pillar_x, bracket_y
 }
 
 module left_bracket(synth_width, synth_depth, angle) {
-    bracket_x = -holder_extension_sides_bottom;
+    bracket_x = holder_distance_sides_bottom;
     bracket_y = -holder_extension_sides_frontback;
     bracket_z = -holder_extension_sides_up;
-    bracket_width = holder_extension_sides_bottom + holder_creep_sides_bottom;
+    bracket_width = holder_creep_sides_bottom * 2;
     bracket_depth = synth_depth + 2 * holder_extension_sides_frontback;
     bracket_height = holder_extension_sides_up + holder_creep_sides_up;
     
     translate([bracket_x, bracket_y, bracket_z]) {
         cube([bracket_width, bracket_depth, bracket_height]);
     }
-    pillars(bracket_width + 1, bracket_depth, bracket_height, bracket_x, bracket_y, bracket_z, angle);
+    pillars(bracket_width, bracket_depth, bracket_height, bracket_x, bracket_y, bracket_z, angle);
 }
 
 module center_bracket(synth_width, synth_depth, angle) {
@@ -81,17 +81,17 @@ module center_bracket(synth_width, synth_depth, angle) {
 }
 
 module right_bracket(synth_width, synth_depth, angle) {
-    bracket_x = synth_width - holder_creep_sides_bottom;
+    bracket_x = synth_width - holder_distance_sides_bottom - holder_creep_sides_bottom * 2;
     bracket_y = -holder_extension_sides_frontback;
     bracket_z = -holder_extension_sides_up;
-    bracket_width = holder_extension_sides_bottom + holder_creep_sides_bottom;
+    bracket_width = holder_creep_sides_bottom * 2;
     bracket_depth = synth_depth + 2 * holder_extension_sides_frontback;
     bracket_height = holder_extension_sides_up + holder_creep_sides_up;
     
     translate([bracket_x, bracket_y, bracket_z]) {
         cube([bracket_width, bracket_depth, bracket_height]);
     }
-    pillars(bracket_width - 1, bracket_depth, bracket_height, bracket_x, bracket_y, bracket_z, angle);
+    pillars(bracket_width, bracket_depth, bracket_height, bracket_x, bracket_y, bracket_z, angle);
 }
 
 module coast_holder() {
@@ -148,17 +148,24 @@ module ground_cylinder(offset, width) {
    }
 }
 
-color("pink", 0.85) {
+color("pink", 0.85) scale([10, 10, 10]) {
     difference() {
         union() {
             coast_holder();
             mavis_holder();
-            ground_cylinder(0.8, coast_width - 2);
-            ground_cylinder(13.7, coast_width - 2);
-            ground_cylinder(20.8, mavis_width - 2);
+            ground_cylinder(1.4, coast_width - 4);
+            // ground_cylinder(7.2, coast_width - 4);
+            ground_cylinder(13.6, coast_width - 4);
+            // ground_cylinder(17.5, mavis_width - 4);
+            ground_cylinder(20.3, mavis_width - 4);
         }
-        translate([-100, -100, -100]) {
-            cube([200, 200, 100]);
+        union() {
+            translate([-100, -100, -100]) {
+                cube([200, 200, 100]);
+            }
+            translate([-100, -100, 22]) {
+                cube([200, 200, 100]);
+            }
         }
     }
 }
