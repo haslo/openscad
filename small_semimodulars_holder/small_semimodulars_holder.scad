@@ -1,4 +1,4 @@
-coast_width = 23; coast_depth = 14; coast_height = 2; coast_angle = 32.5;
+coast_width = 23; coast_depth = 14; coast_height = 2; coast_angle = 30;
 mavis_width = 23.2; mavis_depth = 13.4; mavis_height = 2; mavis_angle = coast_angle * 2;
 coast_front_bottom_height = 4.5;
 coast_front_height_offset = coast_depth * sin(coast_angle);
@@ -89,5 +89,14 @@ module mavis_holder() {
 
 color("pink", 0.85) {
     coast_holder();
-    mavis_holder();    
+    mavis_holder();
 }
+
+// Calculate support connection points
+coast_front_left = [-coast_width/2, 0, coast_front_bottom_height];
+coast_front_right = [coast_width/2, 0, coast_front_bottom_height];
+coast_back_center = [0, coast_front_lateral_offset, coast_front_top_height];
+
+mavis_front_left = [-mavis_width/2, mavis_front_bottom_lateral_offset, mavis_front_bottom_height];
+mavis_front_right = [mavis_width/2, mavis_front_bottom_lateral_offset, mavis_front_bottom_height];
+mavis_back_center = [0, mavis_front_bottom_lateral_offset + mavis_front_lateral_offset, mavis_front_bottom_height + mavis_front_height_offset];
