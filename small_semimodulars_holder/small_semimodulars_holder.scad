@@ -14,6 +14,8 @@ holder_extension_sides_frontback = 0.3;
 holder_creep_sides_up = 1.0;
 holder_creep_sides_bottom = 0.5;
 pillar_radius = 0.6;
+ground_pillar_radius = 0.8;
+pillar_faces = 32;
 
 module pillars(bracket_width, bracket_depth, bracket_height, bracket_x, bracket_y, bracket_z, angle) {
     pillar_length = 35;
@@ -21,28 +23,28 @@ module pillars(bracket_width, bracket_depth, bracket_height, bracket_x, bracket_
     translate([bracket_x + bracket_width/2, bracket_y, bracket_z]) {
         rotate([-angle, 0, 0]) {
             translate([0, 0, -pillar_length]) {
-                cylinder(r=pillar_radius, h=pillar_length, $fn=64);
+                cylinder(r=pillar_radius, h=pillar_length, $fn=pillar_faces);
             }
         }
-        sphere(r=pillar_radius, $fn=64);
+        sphere(r=pillar_radius, $fn=pillar_faces);
     }
     // Center pillar
     translate([bracket_x + bracket_width/2, bracket_y + bracket_depth/2, bracket_z]) {
         rotate([-angle, 0, 0]) {
             translate([0, 0, -pillar_length]) {
-                cylinder(r=pillar_radius, h=pillar_length, $fn=64);
+                cylinder(r=pillar_radius, h=pillar_length, $fn=pillar_faces);
             }
         }
-        sphere(r=pillar_radius, $fn=64);
+        sphere(r=pillar_radius, $fn=pillar_faces);
     }
     // Back pillar
     translate([bracket_x + bracket_width/2, bracket_y + bracket_depth, bracket_z]) {
         rotate([-angle, 0, 0]) {
             translate([0, 0, -pillar_length]) {
-                cylinder(r=pillar_radius, h=pillar_length, $fn=64);
+                cylinder(r=pillar_radius, h=pillar_length, $fn=pillar_faces);
             }
         }
-        sphere(r=pillar_radius, $fn=64);
+        sphere(r=pillar_radius, $fn=pillar_faces);
     }
 }
 
@@ -93,10 +95,14 @@ module coast_holder() {
         translate([0, 0, coast_front_bottom_height]) {
             rotate([coast_angle, 0, 0]) {
                 translate([0, 0, -coast_height]) {
-                    left_bracket(coast_width, coast_depth, coast_angle);
-                    center_bracket(coast_width, coast_depth, coast_angle);
-                    right_bracket(coast_width, coast_depth, coast_angle);
-                    cube([coast_width, coast_depth, coast_height], center=false);
+                    difference() {
+                        union() {
+                            left_bracket(coast_width, coast_depth, coast_angle);
+                            center_bracket(coast_width, coast_depth, coast_angle);
+                            right_bracket(coast_width, coast_depth, coast_angle);
+                        }
+                        cube([coast_width, coast_depth, coast_height], center=false);
+                    }
                 }
             }
         }
@@ -108,17 +114,47 @@ module mavis_holder() {
         translate([0, 0, mavis_front_bottom_height]) {
             rotate([mavis_angle, 0, 0]) {
                 translate([0, 0, -mavis_height]) {
-                    left_bracket(mavis_width, mavis_depth, mavis_angle);
-                    center_bracket(mavis_width, mavis_depth, mavis_angle);
-                    right_bracket(mavis_width, mavis_depth, mavis_angle);
-                    cube([mavis_width, mavis_depth, mavis_height], center=false);
+                    difference() {
+                        union() {
+                            left_bracket(mavis_width, mavis_depth, mavis_angle);
+                            center_bracket(mavis_width, mavis_depth, mavis_angle);
+                            right_bracket(mavis_width, mavis_depth, mavis_angle);
+                        }
+                        cube([mavis_width, mavis_depth, mavis_height], center=false);
+                    }
                 }
             }
         }
     }
 }
 
+module ground_cylinder(offset, width) {
+   translate([0, offset, 0]) {
+       rotate([0, 90, 0]) {
+           cylinder(r=ground_pillar_radius, h=width, center=true, $fn=pillar_faces);
+       }
+       // Left end cap
+       translate([-width/2, 0, 0]) {
+           sphere(r=ground_pillar_radius, $fn=pillar_faces);
+       }
+       // Right end cap  
+       translate([width/2, 0, 0]) {
+           sphere(r=ground_pillar_radius, $fn=pillar_faces);
+       }
+   }
+}
+
 color("pink", 0.85) {
-    coast_holder();
-    mavis_holder();
+    difference() {
+        union() {
+            coast_holder();
+            mavis_holder();
+            ground_cylinder(0.8, coast_width - 2);
+            ground_cylinder(13.7, coast_width - 2);
+            ground_cylinder(20.8, mavis_width - 2);
+        }
+        translate([-100, -100, -100]) {
+            cube([200, 200, 100]);
+        }
+    }
 }
