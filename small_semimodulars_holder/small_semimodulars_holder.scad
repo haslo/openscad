@@ -11,7 +11,7 @@ mavis_front_bottom_lateral_offset = coast_front_lateral_offset;
 mavis_front_height_offset = mavis_depth * sin(mavis_angle);
 mavis_front_lateral_offset = mavis_depth * cos(mavis_angle);
 
-holder_distance_sides_bottom = 0.5;
+holder_distance_sides_bottom = 3;
 holder_extension_sides_up = 0.3;
 holder_extension_sides_frontback = 0.5;
 holder_creep_sides_up = 0.8;
@@ -153,11 +153,11 @@ color("pink", 0.85) scale([10, 10, 10]) {
         union() {
             coast_holder();
             mavis_holder();
-            ground_cylinder(1.4, coast_width - 4);
-            // ground_cylinder(7.2, coast_width - 4);
-            ground_cylinder(13.6, coast_width - 4);
-            // ground_cylinder(17.5, mavis_width - 4);
-            ground_cylinder(20.3, mavis_width - 4);
+            ground_cylinder(1.4, coast_width - 8);
+            // ground_cylinder(7.2, coast_width - 8);
+            ground_cylinder(13.6, coast_width - 8);
+            // ground_cylinder(17.5, mavis_width - 8);
+            ground_cylinder(20.3, mavis_width - 8);
         }
         union() {
             translate([-100, -100, -100]) {
