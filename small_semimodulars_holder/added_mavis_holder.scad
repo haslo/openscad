@@ -16,6 +16,7 @@ holder_extension_sides_up = 0.3;
 holder_extension_sides_frontback = 0.5;
 holder_creep_sides_up = 0.8;
 holder_creep_sides_bottom = 0.5;
+holder_extension_clamps_depth = 0.3;
 
 pillar_length = 35;
 pillar_radius = 0.55;
@@ -148,28 +149,54 @@ module ground_cylinder(offset, width) {
    }
 }
 
-module small_semimodulars_holder() {
-    color("pink", 0.85) scale([10, 10, 10]) {
-        difference() {
-            union() {
-                coast_holder();
-                mavis_holder();
-                ground_cylinder(1.4, coast_width - 8);
-                // ground_cylinder(7.2, coast_width - 8);
-                ground_cylinder(13.6, coast_width - 8);
-                // ground_cylinder(17.5, mavis_width - 8);
-                ground_cylinder(20.3, mavis_width - 8);
-            }
-            union() {
-                translate([-100, -100, -100]) {
-                    cube([200, 200, 100]);
-                }
-                translate([-100, -100, 22]) {
-                    cube([200, 200, 100]);
-                }
-            }
-        }
+module added_mavis_holder() {
+	ground_height = 0.2;
+	ground_go_over = 0.15;
+    scale([10, 10, 10]) {
+        rotate([-mavis_angle + 90, 0, 0]) difference() {
+		    translate([-mavis_width / 2, mavis_front_bottom_lateral_offset, 0]) {
+		        translate([0, 0, mavis_front_bottom_height]) {
+		            rotate([mavis_angle, 0, 0]) {
+		            	translate([0, 0, -mavis_height - ground_height]) {
+		            		cube([mavis_width, holder_creep_sides_bottom * 2, ground_height + ground_go_over]);
+		            	}
+		            	translate([-holder_extension_clamps_depth, 0, -mavis_height - ground_height]) {
+							cube([holder_extension_clamps_depth, holder_creep_sides_bottom * 2, holder_creep_sides_up + ground_height]);
+		            	}
+		            	translate([mavis_width, 0, -mavis_height - ground_height]) {
+							cube([holder_extension_clamps_depth, holder_creep_sides_bottom * 2, holder_creep_sides_up + ground_height]);
+		            	}
+		            }
+		        }
+		    }
+            mavis_holder();
+	    }
+    }    
+}
+module added_coast_holder() {
+	// TODO
+	ground_height = 0.2;
+	ground_go_over = 0.15;
+    scale([10, 10, 10]) {
+        rotate([-coast_angle + 90, 0, 0]) difference() {
+		    translate([-coast_width / 2, coast_front_bottom_lateral_offset, 0]) {
+		        translate([0, 0, coast_front_bottom_height]) {
+		            rotate([coast_angle, 0, 0]) {
+		            	translate([0, 0, -coast_height - ground_height]) {
+		            		cube([coast_width, holder_creep_sides_bottom * 2, ground_height + ground_go_over]);
+		            	}
+		            	translate([-holder_extension_clamps_depth, 0, -coast_height - ground_height]) {
+							cube([holder_extension_clamps_depth, holder_creep_sides_bottom * 2, holder_creep_sides_up + ground_height]);
+		            	}
+		            	translate([coast_width, 0, -coast_height - ground_height]) {
+							cube([holder_extension_clamps_depth, holder_creep_sides_bottom * 2, holder_creep_sides_up + ground_height]);
+		            	}
+		            }
+		        }
+		    }
+            coast_holder();
+	    }
     }    
 }
 
-small_semimodulars_holder();
+added_mavis_holder();
