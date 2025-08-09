@@ -174,12 +174,11 @@ module added_mavis_holder() {
     }    
 }
 module added_coast_holder() {
-	// TODO
 	ground_height = 0.2;
 	ground_go_over = 0.15;
     scale([10, 10, 10]) {
         rotate([-coast_angle + 90, 0, 0]) difference() {
-		    translate([-coast_width / 2, coast_front_bottom_lateral_offset, 0]) {
+		    translate([-coast_width / 2, 0, 0]) {
 		        translate([0, 0, coast_front_bottom_height]) {
 		            rotate([coast_angle, 0, 0]) {
 		            	translate([0, 0, -coast_height - ground_height]) {
@@ -199,4 +198,5 @@ module added_coast_holder() {
     }    
 }
 
-added_mavis_holder();
+// added_mavis_holder();
+added_coast_holder();
