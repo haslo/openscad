@@ -49,10 +49,12 @@ difference() {
             }
         }
     }
+
+    // fancy base cuts
     union() {
         color("grey", 0.5) {
             translate([-30, 0, 10]) {
-                rotate([0, 0, 90]) {
+                rotate([0, 0, 100]) {
                     translate([-100, 0, 20]) {
                         rotate([220, 0, 0]) {
                             cube([200, 100, 100]);
