@@ -89,13 +89,27 @@ union() {
     }
 
     color("blue", 0.8) {
-        linear_extrude(height = 28, scale = 0.5) {
-            polygon(points = [
-                [10, 30],
-                [-10, 10],
-                [-40, 30],
-                [-10, 60]
-            ]);
+        translate([-20, 0, 0]) {
+            linear_extrude(height = 28, scale = 0.5) {
+                polygon(points = [
+                    [5, 30],
+                    [-10, 10],
+                    [-40, 30],
+                    [-10, 60]
+                ]);
+            }
+        }
+        rotate([0, 0, -90]) {
+            translate([-20, -16, 0]) {
+                linear_extrude(height = 30, scale = 0.5) {
+                    polygon(points = [
+                        [5, 30],
+                        [-10, 10],
+                        [-40, 30],
+                        [-30, 60]
+                    ]);
+                }
+            }
         }
     }
 }
